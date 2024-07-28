@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Categories</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Categories</h1>
-    <form>
-        <select name="category_id">
-            <?php require_once 'categories.php';?>
-        </select>
-    </form>
-</body>
-</html>
+// categories.php
+<?php
+require_once 'vendor/autoload.php';
+use Michelf\MarkdownExtra;
+
+// connect to database
+$conn = new SQLite3('database.db');
+
+// display categories
+$query = "SELECT * FROM categories";
+$result = $conn->query($query);
+
+if ($result->numColumns() > 0) {
+  echo "<h1>Categories</h1>";
+  echo "<ul>";
+  while ($row = $result->fetchArray()) {
+    echo "<li>" . $row["name"] . "</li>";
+  }
+  echo "</ul>";
+} else {
+  echo "No categories found";
+}
+
+// close connection
+$conn->close();
+?>
